@@ -1,0 +1,75 @@
+**Answer: **
+<ol>
+<li> <b>Gaussian Naive Bayes (GaussianNB):</b>
+	<ul>
+		<li>real-world application in industry
+			<p>It is used in Text categorization. It has high search accuarcy in image calssification(Source :https://en.wikipedia.org/wiki/Support_vector_machine). Also it has wide range of usage in Biological fields </p></li>
+		<li>strengths of the model
+			<p>SVMs can operate on large feature set</p></li>
+		<li>weaknesses of the model</li>
+		<li>What makes this model a good candidate for the problem</li>
+	</ul>
+</li>
+<li> <b>Decision Trees:</b>
+	<ul>
+		<li>real-world application in industry
+			<p>It is used in Text categorization. It has high search accuarcy in image calssification(Source :https://en.wikipedia.org/wiki/Support_vector_machine). Also it has wide range of usage in Biological fields </p></li>
+		<li>strengths of the model
+			<p>SVMs can operate on large feature set</p></li>
+		<li>weaknesses of the model</li>
+		<li>What makes this model a good candidate for the problem</li>
+	</ul>
+</li>
+ <li> <b>Ensemble Methods (Bagging, AdaBoost, Random Forest, Gradient Boosting):</b>
+	<ul>
+		<li>real-world application in industry
+			<p>It is used in Text categorization. It has high search accuarcy in image calssification(Source :https://en.wikipedia.org/wiki/Support_vector_machine). Also it has wide range of usage in Biological fields </p></li>
+		<li>strengths of the model
+			<p>SVMs can operate on large feature set</p></li>
+		<li>weaknesses of the model</li>
+		<li>What makes this model a good candidate for the problem</li>
+	</ul>
+</li>
+<li> <b>K-Nearest Neighbors (KNeighbors):</b>
+	<ul>
+		<li>real-world application in industry
+			<p>It is used in Text categorization. It has high search accuarcy in image calssification(Source :https://en.wikipedia.org/wiki/Support_vector_machine). Also it has wide range of usage in Biological fields </p></li>
+		<li>strengths of the model
+			<p>SVMs can operate on large feature set</p></li>
+		<li>weaknesses of the model</li>
+		<li>What makes this model a good candidate for the problem</li>
+	</ul>
+</li>
+<li> <b>Stochastic Gradient Descent (SGDC):</b>
+	<ul>
+		<li>real-world application in industry
+			<p>It is used in Text categorization. It has high search accuarcy in image calssification(Source :https://en.wikipedia.org/wiki/Support_vector_machine). Also it has wide range of usage in Biological fields </p></li>
+		<li>strengths of the model
+			<p>SVMs can operate on large feature set</p></li>
+		<li>weaknesses of the model</li>
+		<li>What makes this model a good candidate for the problem</li>
+	</ul>
+</li>
+<li> <b>Support Vector Machines (SVM):</b>
+	<ul>
+		<li>real-world application in industry
+			<p>It is used in Text categorization. It has high search accuarcy in image calssification(Source :https://en.wikipedia.org/wiki/Support_vector_machine). Also it has wide range of usage in Biological fields </p></li>
+		<li>strengths of the model
+			<p>SVMs can operate on large feature set</p></li>
+		<li>weaknesses of the model</li>
+		<li>What makes this model a good candidate for the problem</li>
+	</ul>
+</li>
+<li> <b>Logistic Regression:</b>
+	<ul>
+		<li>real-world application in industry
+			<p>It is used in Text categorization. It has high search accuarcy in image calssification(Source :https://en.wikipedia.org/wiki/Support_vector_machine). Also it has wide range of usage in Biological fields </p></li>
+		<li>strengths of the model
+			<p>SVMs can operate on large feature set</p></li>
+		<li>weaknesses of the model</li>
+		<li>What makes this model a good candidate for the problem</li>
+	</ul>
+</li>
+
+</ol>
+
