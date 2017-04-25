@@ -73,7 +73,7 @@ class LearningAgent(Agent):
         # Set 'state' as a tuple of relevant data for the agent   
 
         #state = None
-        state=(waypoint,inputs['light'],inputs['oncoming'],inputs['left'],inputs['right'])
+        state=(inputs['light'],inputs['oncoming'],inputs['left'],inputs['right'])
 
         return state
 
@@ -87,7 +87,7 @@ class LearningAgent(Agent):
         ###########
         # Calculate the maximum Q-value of all actions for a given state
 
-        maxQ = None
+        maxQ = max(self.Q[state], key=self.Q[state].get)
 
         return maxQ 
 
@@ -104,14 +104,11 @@ class LearningAgent(Agent):
         
         #######
         #print ("Explore Spandan: ",(state.tostring()))
-        '''dict_action={}
-        for x in self.valid_actions:
-            dict_action[x]=0.0
-
-        
-        if self.learning:
-            self.Q[(state)]={dict_action}'''
-
+        if not state in self.Q:
+            temp_actions={}
+            for x in self.valid_actions:
+                temp_actions[x]=0.0
+            self.Q[state]=temp_actions
 
         return
 
