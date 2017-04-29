@@ -71,8 +71,16 @@ class LearningAgent(Agent):
         ########### 
         ## TO DO ##
         ###########
-        # Set 'state' as a tuple of relevant data for the agent        
-        state = (waypoint, inputs['light'],inputs['oncoming'],inputs['left'])
+        # Set 'state' as a tuple of relevant data for the agent  
+        ### Not using ,inputs['right'].. As per US Traffic rules when the light is Green for primary cab , the intended direction of the
+        ### Cab at my Right doesnt matter for my next action.
+        ### When the light is Red , only degree of freedom I have to go right when there is no Cab coming from Left in same lane. In this scenario
+        ### as well my action is not dependent on the intended direction of the Cab to my right      
+
+        ### Further from Review comments the traffic from Left is only relevant for learning when I have Red light and 
+        ### the cab at left drives forward. All other cases traffic from left will not be of any concern
+        ### hence further reducing the State space to inputs['left'] == 'forward'
+        state = (waypoint, inputs['light'],inputs['oncoming'],inputs['left']=='forward')
         ### Not using ,inputs['right'].. As per US Traffic rules when the light is Green for primary cab , the intended direction of the
         ### Cab at my Right doesnt matter for my next action.
         ### When the light is Red , only degree of freedom I have to go right when there is no Cab coming from Left in same lane. In this scenario
@@ -93,8 +101,9 @@ class LearningAgent(Agent):
         ### in an way the maxq is the policy we are after when a cab sees a state .. it takes action based
         ### on the highest Q value associated to the action
 
-        maxQ = max(self.Q[state], key=self.Q[state].get)  # this returns the Key of the dictionary with Highest Value
+        ###maxQ = max(self.Q[state], key=self.Q[state].get)  # this returns the Key of the dictionary with Highest Value
                                                           # since the Actions & their Q value is a Dictionary returned by Q[State]
+        maxQ=max(self.Q[state].values())  # gets the Max Value from the Action dictionary for the state
 
         return maxQ 
 
@@ -142,7 +151,18 @@ class LearningAgent(Agent):
                 action=random.choice(self.valid_actions)
             else: 
                 ### Get the action with the highest Q value from Q table for the State
-                action=self.get_maxQ(state)
+                # in case of multiple actions in the state has same Q values == Max Q value, pick one of the actions randomly
+                temp_max_Q_keys=[]
+                for key1, val1 in self.Q[state].items():
+                    if val1==self.get_maxQ(state):
+                        temp_max_Q_keys.append(key1)
+                if len(temp_max_Q_keys)==1:
+
+                    action = max(self.Q[state], key=self.Q[state].get)  # Get the Action that has max q val
+                    #### print('Only 1 key/action:', action)
+                else:
+                    action=random.choice(temp_max_Q_keys)
+                    ### print('More than 1 key/action found:', self.Q[state],'//Action Taken:', action)
  
         return action
 
@@ -157,7 +177,8 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-        self.Q[state][action]=(1-self.alpha)*self.Q[state][action]+reward*self.alpha
+        #### self.Q[state][action]=(1-self.alpha)*self.Q[state][action]+reward*self.alpha
+        self.Q[state][action] += self.alpha*(reward - self.Q[state][action])
 
         return
 
@@ -216,7 +237,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=20,tolerance=.000001)
+    sim.run(n_test=20,tolerance=.00000001)
 
 
 if __name__ == '__main__':
