@@ -228,6 +228,7 @@ class Simulator(object):
         if self.log_metrics:
 
             if a.learning:
+                counter_num=0
                 f = self.table_file
                 
                 f.write("/-----------------------------------------\n")
@@ -238,7 +239,10 @@ class Simulator(object):
                     f.write("{}\n".format(state))
                     for action, reward in a.Q[state].iteritems():
                         f.write(" -- {} : {:.2f}\n".format(action, reward))
+                        if reward==0.00:
+                            counter_num=counter_num+1
                     f.write("\n")  
+                f.write("Not encountered Scenario: {}".format(counter_num) ) 
                 self.table_file.close()
 
             self.log_file.close()

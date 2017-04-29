@@ -19,14 +19,13 @@ class LearningAgent(Agent):
         self.epsilon = epsilon   # Random exploration factor
         self.alpha = alpha       # Learning factor
 
-        ### Added to count the no# of trails till epsilon decays to Tolerance set for the simulator
-        ### to switch to testing from Learning
-        self.trialcounter=0
-
         ###########
         ## TO DO ##
         ###########
         # Set any additional class parameters as needed
+        ### Added to count the no# of trails till epsilon decays to Tolerance set for the simulator
+        ### to switch to testing from Learning
+        self.trialcounter=0
 
 
     def reset(self, destination=None, testing=False):
@@ -48,12 +47,14 @@ class LearningAgent(Agent):
             self.alpha=0.0
         else:
             #### Constant decay of epsilon by .05
-            #self.epsilon=self.epsilon-0.05
-            ### Exponential Decay of Epsilon with a=0.6
+            #self.epsilon=self.epsilon-0.001
+            ### Exponential Decay of Epsilon with a=0.1
+            ### Trail counter increases as the no# of trail increases resulting to exponential
+            ### decay of epsilon
+            ### self.epsilon=self.epsilon-.05
             self.epsilon=math.exp((-1)*.1*self.trialcounter)
+            self.alpha=self.alpha*.999
             self.trialcounter=self.trialcounter+1
-
-            #ntrial
 
         return None
 
@@ -70,10 +71,12 @@ class LearningAgent(Agent):
         ########### 
         ## TO DO ##
         ###########
-        # Set 'state' as a tuple of relevant data for the agent   
-
-        #state = None
-        state=(inputs['light'],inputs['oncoming'],inputs['left'],inputs['right'])
+        # Set 'state' as a tuple of relevant data for the agent        
+        state = (waypoint, inputs['light'],inputs['oncoming'],inputs['left'])
+        ### Not using ,inputs['right'].. As per US Traffic rules when the light is Green for primary cab , the intended direction of the
+        ### Cab at my Right doesnt matter for my next action.
+        ### When the light is Red , only degree of freedom I have to go right when there is no Cab coming from Left in same lane. In this scenario
+        ### as well my action is not dependent on the intended direction of the Cab to my right
 
         return state
 
@@ -86,8 +89,12 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
+        ### maxQ to hold the Action : Left /Right/Forward which has the Highest Q value for the state
+        ### in an way the maxq is the policy we are after when a cab sees a state .. it takes action based
+        ### on the highest Q value associated to the action
 
-        maxQ = max(self.Q[state], key=self.Q[state].get)
+        maxQ = max(self.Q[state], key=self.Q[state].get)  # this returns the Key of the dictionary with Highest Value
+                                                          # since the Actions & their Q value is a Dictionary returned by Q[State]
 
         return maxQ 
 
@@ -101,14 +108,11 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
-        
-        #######
-        #print ("Explore Spandan: ",(state.tostring()))
         if not state in self.Q:
-            temp_actions={}
+            temp_act_dict={}
             for x in self.valid_actions:
-                temp_actions[x]=0.0
-            self.Q[state]=temp_actions
+                temp_act_dict[x]=0.0
+            self.Q[state]=temp_act_dict
 
         return
 
@@ -128,19 +132,17 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        ### Span Code Goes Here 
         if not self.learning:
-            # Choose Random Actiion if not learninng
-            action= random.choice(self.valid_actions)
+            action=random.choice(self.valid_actions)
         else:
-            # epsilon Probability random action 
-            
+            ### epsilon probability aims to enable some random exploration early on in trails
+            ### as epsilon decays the chance that the Cab will randomly explores will go down
+            ### instead the Cab will follow the Q table for policy
             if self.epsilon>random.random():
-                action= random.choice(self.valid_actions)
-            else:
-                action = self.get_maxQ(state)
-
-
+                action=random.choice(self.valid_actions)
+            else: 
+                ### Get the action with the highest Q value from Q table for the State
+                action=self.get_maxQ(state)
  
         return action
 
@@ -184,7 +186,7 @@ def run():
     #   verbose     - set to True to display additional output from the simulation
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
-    env = Environment(verbose= True)
+    env = Environment()
     
     ##############
     # Create the driving agent
@@ -192,7 +194,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent,learning=True,alpha=.3)
+    agent = env.create_agent(LearningAgent,learning=True,alpha=1)
     
     ##############
     # Follow the driving agent
@@ -207,16 +209,14 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-
-    #log_metrics=True
-    sim = Simulator(env,update_delay=.01,log_metrics=True, optimized=True, display=False)
+    sim = Simulator(env, update_delay=.01,display=False,log_metrics=True,optimized=True)
     
     ##############
     # Run the simulator
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=20, tolerance=.02)
+    sim.run(n_test=20,tolerance=.000001)
 
 
 if __name__ == '__main__':
