@@ -11813,7 +11813,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Import the visualization code</span>
@@ -14598,7 +14598,7 @@ $$ \epsilon = a^t, \textrm{for } 0 < a < 1 \hspace{50px}\epsilon = \frac{1}{t^2}
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[81]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Load the &#39;sim_improved-learning&#39; file from the improved Q-Learning simulation</span>
@@ -16060,10 +16060,13 @@ and respective q values for the state
 In standard Q learning the additional reward of reaching goal propagates through the Q value of each step and nudges the agent to take the optimal path to reach the goal, even though there may be multiple ways to reach the goal. The gamma ensures the Cab doesnt take infinite steps to find out the optimal path.</p>
 <p>However in our use case (in the Environment Cab runs) there is no additional rewards to reach the Goal.
 There are two reasons:</p>
-<ol>
-<li>The Destination moves around from each trial and test, making an Optimal path for Current set up ir relevant for the next test or trial. So the idea of back propogation of q values from Goal to current state will not help in our use case since the goal and state is ever changing.</li>
-<li>For the smartcab we have next_waypoint (turn by turn navigation guide) as a state , so all it is learning to follow traffic rules/ avoid accident and follow the way point when ever it can through positive/negetive rewards to reach destination safely and in time. Cab doesnt need future rewards since presence of  Planner utility , next way point as state value for the smart cab.</li>
-</ol>
+<p>
+1. The Destination moves around from each trial and test, making an Optimal path for Current set up ir relevant for the next test or trial. So the idea of back propogation of q values from Goal to current state will not help in our use case since the goal and state is ever changing.</p>
+<p>
+2. The smart cab in its present use case is not aware of its present location in the grid  and the relative location of its destination as a State. The planner utility though has idea of where the smart cab is and where the destination lies.But the cab itself is not aware of the fact of its current loaction and route plan to its destination.</p><p>The planner (feeding next way point as a state to the agent) is nudging the smartcab to take good decisions to reach destination (obviously by avoiding traffic violations through negetive rewards).
+Theoritically if we had a static goal with extra reward to reach the goal , we would need current location on the grid as a state too for the smartcab.</p>
+<p><b>As curremt location on the grid is missing a state to smart cab and the destination is not static : </b>
+A back propgation of reward from a static goal to an location agnostic agent in a non deterministic environment (where both goal and state is ever changing) will not help.</p>
 
 </div>
 </div>
